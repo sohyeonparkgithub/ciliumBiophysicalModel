@@ -1,0 +1,37 @@
+% modelParameter.m
+% Last updated on 08-17-2023
+
+nTime = 7000; % number of image frames(total length = nTime*dt[sec])
+
+ciliaLength = 2;
+tzHalfWidth = 0.1; %tzEnd = 0.21; %Transion zone height: from 100nm to 210nm
+tzMiddle = 0.35; 
+
+nState = 3; % Three different modes: advection, diffusion, confinement (binding)
+
+dt = 0.001; % experimental dt: 0.025 --> 40 frames per second  
+            % 2015 PNAS paper is dt = 0.01
+
+% Rate parameters
+lambdaIFT = 10; %IFT arrival rate
+lambdaSmo = 10; %SMO arrival rate
+
+maxIFT = lambdaIFT*(nTime/(dt^-1)); %maximum IFT number
+maxSmo = lambdaSmo*(nTime/(dt^-1)); %maximum SMO number
+
+kBT = 4.1*10^-3; % 1kBT = 4.1pNxnm
+fStall = 6; %6*10^-12; %(5-6pN) %reference: FEBS J. 2017 doi:10.1111/febs.14068
+nMotors = 10; %Peterman et al. reported number is ~40 for c.elegans(train velocity ~1.7µm/s)
+%Mijalkovic, J., Prevo, B., Oswald, F. et al. Ensemble and single-molecule dynamics of IFT dynein in Caenorhabditis elegans cilia. Nat Commun 8, 14591 (2017).
+% for MEF, no data available.
+
+%% Cytoplasmic level paramter values (We can also make this value to be learned)
+
+% elastic barrier
+uCytoDefault = 0;
+uCytoTZ = tzHalfWidth * nMotors * fStall / 2;
+
+% viscosity
+xiCytoDefault = 0.002;%0.001;
+xiCytoTZ = 0.004;%0.01;%1;
+
